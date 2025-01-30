@@ -13,6 +13,7 @@ import {
   Legend,
   Cell,
 } from 'recharts';
+import React from "react";
 
 export const SalesBarChart = () => {
     const data = useSelector((state) => state.chart.barChartData);
@@ -20,7 +21,7 @@ export const SalesBarChart = () => {
     return (
       <div className="p-4 bg-white rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Quarterly Sales Comparison</h2>
-        <BarChart width={600} height={300} data={data}>
+        <BarChart width={1400} height={300} data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="category" />
           <YAxis />

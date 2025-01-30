@@ -13,6 +13,7 @@ import {
   Legend,
   Cell,
 } from 'recharts';
+import React from "react";
 
 export const SalesLineChart = () => {
     const data = useSelector((state) => state.chart.lineChartData);

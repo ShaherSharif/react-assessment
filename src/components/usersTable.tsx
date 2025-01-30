@@ -13,6 +13,8 @@ import {
   Legend,
   Cell,
 } from 'recharts';
+import React from "react";
+
 
 export const UsersTable = () => {
     const users = useSelector((state) => state.table.users);
