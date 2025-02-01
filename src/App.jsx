@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import GridLayout from "react-grid-layout";
 import { SalesLineChart } from "./components/salesLineChart.tsx";
 import { SalesBarChart } from "./components/salesBarChart.tsx";
@@ -10,14 +10,19 @@ import { MdDragIndicator } from "react-icons/md";
 
 // Main App Component
 export default function App() {
-  
-  const layout = [
-    { i: "lineChart", x: 0, y: 0, w: 2, h: 2 },
-    { i: "pieChart", x: 2, y: 0, w: 2, h: 2 },
-    { i: "barChart", x: 0, y: 2, w: 4, h: 2 },
-    { i: "usersTable", x: 0, y: 4, w: 2, h: 2 },
-    { i: "productsTable", x: 2, y: 4, w: 2, h: 2 }
+  const initialLayout = [
+    { i: "lineChart", x: 0, y: 0, w: 2, h: 2, minW: 1, minH: 1 },
+    { i: "pieChart", x: 2, y: 0, w: 2, h: 2, minW: 1, minH: 1 },
+    { i: "barChart", x: 0, y: 2, w: 4, h: 2, minW: 2, minH: 1 },
+    { i: "usersTable", x: 0, y: 4, w: 2, h: 2, minW: 1, minH: 1 },
+    { i: "productsTable", x: 2, y: 4, w: 2, h: 2, minW: 1, minH: 1 }
   ];
+
+  const [layout, setLayout] = useState(initialLayout);
+
+  const handleLayoutChange = (newLayout) => {
+    setLayout(newLayout);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -26,43 +31,28 @@ export default function App() {
       <GridLayout
         className="layout"
         layout={layout}
+        onLayoutChange={handleLayoutChange}
         cols={4}
         rowHeight={200}
         width={1400}
         draggableHandle=".drag-handle"
         isResizable={true}
         isDraggable={true}
+        compactType={null} // Ensures widgets don't auto-stack
+        preventCollision={false} // Allows repositioning even when resizing
       >
-        <div key="lineChart" className="bg-white shadow-md p-4 rounded-lg">
-          <div className="drag-handle cursor-move flex justify-center">
-            <MdDragIndicator size={24} className="text-gray-500" />
+        {layout.map((item) => (
+          <div key={item.i} className="bg-white shadow-md p-4 rounded-lg">
+            <div className="drag-handle cursor-move flex justify-center">
+              <MdDragIndicator size={24} className="text-gray-500" />
+            </div>
+            {item.i === "lineChart" && <SalesLineChart />}
+            {item.i === "pieChart" && <CategoryPieChart />}
+            {item.i === "barChart" && <SalesBarChart />}
+            {item.i === "usersTable" && <UsersTable />}
+            {item.i === "productsTable" && <ProductsTable />}
           </div>
-          <SalesLineChart />
-        </div>
-        <div key="pieChart" className="bg-white shadow-md p-4 rounded-lg">
-          <div className="drag-handle cursor-move flex justify-center">
-            <MdDragIndicator size={24} className="text-gray-500" />
-          </div>
-          <CategoryPieChart />
-        </div>
-        <div key="barChart" className="bg-white shadow-md p-4 rounded-lg">
-          <div className="drag-handle cursor-move flex justify-center">
-            <MdDragIndicator size={24} className="text-gray-500" />
-          </div>
-          <SalesBarChart />
-        </div>
-        <div key="usersTable" className="bg-white shadow-md p-4 rounded-lg">
-          <div className="drag-handle cursor-move flex justify-center">
-            <MdDragIndicator size={24} className="text-gray-500" />
-          </div>
-          <UsersTable />
-        </div>
-        <div key="productsTable" className="bg-white shadow-md p-4 rounded-lg">
-          <div className="drag-handle cursor-move flex justify-center">
-            <MdDragIndicator size={24} className="text-gray-500" />
-          </div>
-          <ProductsTable />
-        </div>
+        ))}
       </GridLayout>
     </div>
   );
